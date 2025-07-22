@@ -1,3 +1,4 @@
+import { Textarea } from "@/components/ui/textarea"
 
 
 function ModalEmail({onClose, onSubmit}) {
@@ -15,14 +16,13 @@ function ModalEmail({onClose, onSubmit}) {
           type="email"
           placeholder="Enter your email"
           className="input-field"
-          
         />
+
         <input type="text" placeholder="Subject" className="input-field" />
-        <textarea
+        <Textarea
           className="textarea-body"
           placeholder=""
-        ></textarea>
-
+        ></Textarea>
 
         <div className="modal-footer">
           <button className="send-button" onClick={onSubmit}>
