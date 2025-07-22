@@ -18,8 +18,8 @@ html,
   color: white;
   padding: 1em 2em;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 2em;
 }
 
 .logo {
@@ -28,6 +28,13 @@ html,
 }
 
 .about {
+  cursor: pointer;
+  text-decoration: underline;
+  align-items: flex-start;
+}
+
+.submitted-ticket{
+  align-items: flex-start;
   cursor: pointer;
   text-decoration: underline;
 }
@@ -58,6 +65,21 @@ html,
   border-radius: 5px;
   cursor: pointer;
   margin-top: -100px;
+}
+
+.btnhistory {
+  padding: 0.8em 1.5em;
+  font-size: 1em;
+  background: #7ca1dc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1em;
+}
+
+.btnhistory:hover {
+    background: #4a4d52;
 }
 
 .create-button:hover {
