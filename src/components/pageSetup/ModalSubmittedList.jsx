@@ -7,7 +7,7 @@ const emails = [
     preview: "GitHub home @auxghlann has invited you...",
     fullContent:
       "GitHub home @auxghlann has invited you to the tutorial_git repository. Please accept the invitation to collaborate.",
-    time: "10:53 AM",
+    time: "10:52 AM",
   },
   {
     sender: "Dragonpay",

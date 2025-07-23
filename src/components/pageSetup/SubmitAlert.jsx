@@ -1,4 +1,7 @@
-function SubmitAlert({ onClose}) {
+
+
+
+function SubmitAlert({ onClose }) {
   return (
     <div role="alert" className="rounded-md border border-gray-300 bg-white p-4 shadow-sm fixed top-5 left-1/2 transform -translate-x-1/2 w-96 z-50">
       <div className="flex items-start gap-4">
