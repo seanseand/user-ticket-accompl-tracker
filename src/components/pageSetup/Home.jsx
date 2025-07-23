@@ -9,8 +9,6 @@ export default function Home() {
   const [isSubmittedListOpen, setIsSubmittedListOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
-  
-
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 

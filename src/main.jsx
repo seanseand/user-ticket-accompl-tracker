@@ -8,10 +8,12 @@ import React from "react";
 
 import Login from "./components/pageSetup/Login";
 import Home from "./components/pageSetup/Home";
+import RegisterPage from './components/pageSetup/CreateAccountForm.jsx'
 
 const router = createBrowserRouter([
   { path: "/", element: <Login /> },
   { path: "/home", element: <Home /> },
+  { path: "/RegisterPage", element: <RegisterPage /> },
 ]);
 
 createRoot(document.getElementById('root')).render(
