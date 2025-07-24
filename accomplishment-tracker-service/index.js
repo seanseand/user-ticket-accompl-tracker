@@ -1,5 +1,7 @@
 import express, { json } from 'express';
-import { config } from 'dotenv';
+
+import dotenv from 'dotenv';
+dotenv.config({ path: "./.env" });
 
 // middleware imports
 import { ifValidToken } from './middleware/jwt-middleware.js';
@@ -7,12 +9,14 @@ import { ifValidToken } from './middleware/jwt-middleware.js';
 // route imports
 import { timeInOutRouter } from './routes/time-in-out-route.js';
 
-config({ path: './.env' });
+// util imports
+import redisClient, { connectRedis }  from './util/redis-util.js';
+
 
 const app = express();
 app.use(json());
 
-const PORT = process.env.PORT || 2010;
+const PORT = process.env.PORT || 2020;
 
 app.get('/health', (req, res) => {
     res.status(200).send({status: 'UP'});
@@ -21,6 +25,7 @@ app.get('/health', (req, res) => {
 app.use('/accomplishment-tracker/time-service/', ifValidToken(), timeInOutRouter);
 
 try{
+    await connectRedis();
     app.listen(PORT, () => {
         console.log(`accomplishment-tracker-service is running on port ${PORT}`);
     });
