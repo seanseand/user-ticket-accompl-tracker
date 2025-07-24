@@ -110,7 +110,7 @@ export default function Login() {
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="https://www.youtube.com/watch?v=-ArwDMXTg3g" className="underline underline-offset-4 hover:text-primary">
+          <a href="#" className="underline underline-offset-4 hover:text-primary">
             Privacy Policy
           </a>.
         </div>
