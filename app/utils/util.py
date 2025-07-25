@@ -24,7 +24,7 @@ def extract_clean_json(response_text: str) -> dict | None:
 
 
 def remove_think_blocks(text: str) -> str:
-        # Remove <think>...</think> and everything inside
+    # Remove <think>...</think> and everything inside
     cleaned = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL)
 
     # Replace multiple spaces with one
