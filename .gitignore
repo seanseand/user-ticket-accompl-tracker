@@ -13,3 +13,4 @@ wheels/
 
 tests/
 
+/app/client/doc_vectorstore/ 
