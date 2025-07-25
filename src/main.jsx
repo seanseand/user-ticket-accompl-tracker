@@ -1,16 +1,16 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import './styles/index.css'
 import App from './App.jsx'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import React from "react";
 
-import Login from "./components/pageSetup/Login";
-import Home from "./components/pageSetup/Home";
-import RegisterPage from './components/pageSetup/CreateAccountForm.jsx'
-import Admin from './components/pageSetup/Admin.jsx'
-import AccomplishmentLog from './components/pageSetup/AccomplishmentLog.jsx';
+import Login from "./components/page/Login.jsx";
+import Home from "./components/page/Home.jsx";
+import RegisterPage from './components/page/CreateAccountForm.jsx'
+import Admin from './components/page/Admin.jsx'
+import AccomplishmentLog from './components/page/AccomplishmentLog.jsx';
 
 const router = createBrowserRouter([
   { path: "/", element: <Login /> },

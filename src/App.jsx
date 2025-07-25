@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Link, Routes, Route } from "react-router-dom";
-import Home from "./components/pageSetup/Home";
-import Login from "./components/pageSetup/Login"
-import RegisterPage from "./components/pageSetup/CreateAccountForm";
-import Admin from "./components/pageSetup/Admin";
-import AccomplishmentLog from "./components/pageSetup/AccomplishmentLog";
+import Home from "./components/page/Home";
+import Login from "./components/page/Login"
+import RegisterPage from "./components/page/CreateAccountForm";
+import Admin from "./components/page/Admin";
+import AccomplishmentLog from "./components/page/AccomplishmentLog";
 
 
 function App() {
