@@ -1,5 +1,6 @@
 import React from "react";
-import Sidebar from "../layout/Sidebar";
+import Sidebar from "../../layout/Sidebar";
+import { Outlet } from "react-router";
 
 const AccomplishmentLog = () => {
   return (
@@ -9,7 +10,9 @@ const AccomplishmentLog = () => {
       </nav>
       <div className="flex flex-1">
         <Sidebar />
-        <main className="flex-1 bg-[#F0F3F8]"></main>
+        <main className="flex-1 bg-[#F0F3F8]">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
