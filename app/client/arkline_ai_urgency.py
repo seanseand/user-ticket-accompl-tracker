@@ -1,7 +1,7 @@
 from groq import Groq
 from dotenv import load_dotenv
 from app.utils.util import extract_clean_json
-from app.client.prompts.arkline_urgency_prompts import SYSTEM_BASE_PROMPT, BEHAVIOR_ONE_SHOT_MESSAGE
+from app.client.prompts.arkline_urgency_prompts import SYSTEM_BASE_PROMPT, BEHAVIOR_FEW_SHOT_MESSAGE
 import os
 
 load_dotenv()
@@ -38,7 +38,7 @@ class ArklineAI:
         messages = [{"role": "system", "content": SYSTEM_BASE_PROMPT}]
         
         # Add all training examples
-        messages.extend(BEHAVIOR_ONE_SHOT_MESSAGE)
+        messages.extend(BEHAVIOR_FEW_SHOT_MESSAGE)
         
         # Add the actual user request
         messages.append({"role": "user", "content": prompt})
