@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_500_INTERNAL_SERVER_ERROR
 from pydantic import BaseModel
 from app.client.arkline_ai_urgency import ArklineAI
+from typing import Optional
 
 client = ArklineAI()
 router = APIRouter(
@@ -10,6 +11,7 @@ router = APIRouter(
 )
 
 class UrgencyRequest(BaseModel):
+    subject: Optional[str]
     message: str
 
 class UrgencyResponse(BaseModel):
@@ -18,7 +20,7 @@ class UrgencyResponse(BaseModel):
 @router.post("/get", tags=["Urgency"])
 def get_urgency(request: UrgencyRequest) -> UrgencyResponse:
     try:
-        response = client.get_response(request.message)
+        response = client.get_response(request.subject, request.message)
         if not response or 'urgency' not in response:
             raise HTTPException(
                 status_code=HTTP_400_BAD_REQUEST,
