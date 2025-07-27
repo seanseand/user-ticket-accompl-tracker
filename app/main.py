@@ -11,7 +11,7 @@ app.include_router(rtr_chat.router)
 
 origins = [
     "http://localhost:5173",
-    "https://fruit-pieces-affiliate-louise.trycloudflare.com",  # optional, but safe to include
+    # "https://fruit-pieces-affiliate-louise.trycloudflare.com",  # optional, but safe to include
 ]
 
 app.add_middleware(
