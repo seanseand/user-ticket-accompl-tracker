@@ -1,8 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from starlette import status
-import sys
-import os
 
 from app.client.arkline_ai_chat import answer_question
 
