@@ -57,4 +57,33 @@ async function updateAccomplishment(userId, date, updatedData) {
     }
 }
 
-export { saveAccomplishment, updateAccomplishment};
+
+async function getAccomplishment(userId, date) {
+    const db = getDB();
+    const collection = db.collection('accomplishmentTracker');
+
+    if (!userId || !date) {
+        throw new Error('User ID and date are required');
+    }
+
+    try {
+        const userDoc = await collection.findOne({ userId: userId }, { projection: { _id: 0 } });
+        
+        if (!userDoc) {
+            throw new Error(`No accomplishments found for user ${userId}`);
+        }
+
+        const accomplishment = userDoc.dates?.[date]?.accomplishmentLog;
+        
+        if (!accomplishment) {
+            throw new Error(`No accomplishment found for user ${userId} on date ${date}`);
+        }
+
+        return accomplishment;
+    } catch (error) {
+        console.error('Error retrieving accomplishment:', error);
+        throw error;
+    }
+}
+
+export { saveAccomplishment, updateAccomplishment, getAccomplishment };
