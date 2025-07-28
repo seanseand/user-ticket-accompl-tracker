@@ -9,7 +9,7 @@ import {
     handleGetTimeLogsByUserId,
     handleGetAllTimeLogs
 } from '../controller/time-log-controller.js';
-import { allowedRoles } from '../middleware/jwt-middleware.js';
+import { allowedRoles, requireRoleOrOwnership } from '../middleware/jwt-middleware.js';
 
 
 const timeInOutRouter = Router();
