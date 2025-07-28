@@ -3,6 +3,9 @@ import { getCurrentDateTime } from "./time-in-out-controller.js";
 import { getCurrentActivity } from "../util/time-log-cache-utility.js";
 import { TimeLogNotFoundError } from "../error/time-log-cache-error.js";
 
+//DAL Imports 
+import { saveTimeLog } from "../dal/time-logs-dal.js";
+import { saveAccomplishmentForm } from "../dal/accomplishment-form-dal.js";
 async function handleFormSubmission(req, res) {
     const formData = req.body;
     
@@ -20,8 +23,10 @@ async function handleFormSubmission(req, res) {
         if (!timeLogs) {
             return res.status(404).send({ error: 'No time in record found for today' });
         }
-        // Logic to save form data and time logs to database below 
-        // For now, we will just return the form data and time logs
+
+        await saveTimeLog(userId, currentDateTime.date, timeLogs); // Save time log to the database
+        await saveAccomplishmentForm(userId, currentDateTime.date, formData); // Save form data to the database
+
         return res.status(200).send({ message: 'Form submitted successfully', formData, timeLogs });
     }catch(error) {
         if(error instanceof TimeLogNotFoundError){
