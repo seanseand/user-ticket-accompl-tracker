@@ -1,6 +1,7 @@
 import redisClient from "../util/redis-util.js"
 import { getCurrentActivity, setCurrentActivity} from "../util/time-log-cache-utility.js";
 import { getAllTimeLogs, getTimeLogsByUserId } from "../dal/time-logs-dal.js";
+import { TimeLogSaveError, TimeLogNotFoundError } from "../error/time-log-cache-error.js";
 
 async function handleTimeInRequest(req, res) {
     const userId = req.user.userId;
@@ -9,12 +10,28 @@ async function handleTimeInRequest(req, res) {
     const timeLogs = {
         timeIn: currentDateTime.time,
     }
+    try{
+        const existingActivity = await getCurrentActivity(userId, currentDateTime.date);
+        if (existingActivity) {
+            return res.status(400).send({ error: 'Time in already recorded for today' });
+        }
+    }catch (error) {
+      if (!(error instanceof TimeLogNotFoundError)) {
+            // If the error is not a TimeLogNotFoundError, it means there was an issue checking the existing activity
+            console.error("Error checking existing activity:", error);
+            return res.status(500).send({ error: "Internal server error" });
+      }
+      // No existing activity, proceed to set new time in
+    }
 
     //add time log to cache
     try{
         await setCurrentActivity(userId, currentDateTime.date, timeLogs);
         return res.status(200).send({ message: 'Time in recorded successfully', timeLogs });
     } catch (error) {
+        if (error instanceof TimeLogSaveError) {
+            return res.status(400).send({ error:"Failed to save time log" });
+        }
         console.error('Error saving time log:', error);
         return res.status(500).send({ error: 'Internal server error' });
     }
@@ -34,25 +51,31 @@ async function handleTimeOutRequest(req, res) {
         await setCurrentActivity(userId, currentDateTime.date, timeLogs);
         return res.status(200).send({ message: 'Time out recorded successfully', timeLogs });
     } catch (error) {
+        if (error instanceof TimeLogNotFoundError){
+            return res.status(404).send({ error: "Time in record not found for today" });
+        }
         console.error('Error updating time log:', error);
         return res.status(500).send({ error: 'Internal server error' });
     }
 }
 
-function handleLunchBreakRequest(req, res) {
+async function handleLunchBreakRequest(req, res) {
     const userId = req.user.userId;
     const currentDateTime = getCurrentDateTime();
 
     try{
-        const timeLogs = getCurrentActivity(userId, currentDateTime.date);
+        const timeLogs = await getCurrentActivity(userId, currentDateTime.date);
         if (!timeLogs) {
             return res.status(404).send({ error: 'No time in record found for today' });
         }
-
+        console.log(timeLogs);
         timeLogs.lunchBreakStart = currentDateTime.time;
-        redisClient.hSet(`time-log:${userId}:${currentDateTime.date}`, JSON.stringify(timeLogs));
+        redisClient.set(`time-log:${userId}:${currentDateTime.date}`, JSON.stringify(timeLogs));
         return res.status(200).send({ message: 'Lunch break started successfully', timeLogs });
     } catch (error) {
+        if (error instanceof TimeLogNotFoundError) {
+            return res.status(404).send({ error: "Time in record not found for today" });
+        }
         console.error('Error starting lunch break:', error);
         return res.status(500).send({ error: 'Internal server error' });
     }
@@ -72,6 +95,9 @@ async function handleEndLunchBreakRequest(req, res) {
         await setCurrentActivity(userId, currentDateTime.date, timeLogs);
         return res.status(200).send({ message: 'Lunch break ended successfully', timeLogs });
     } catch (error) {
+        if (error instanceof TimeLogNotFoundError) {
+            return res.status(404).send({ error: "Lunch break record not found for today" });
+        }
         console.error('Error ending lunch break:', error);
         return res.status(500).send({ error: 'Internal server error' });
     }
@@ -88,17 +114,30 @@ async function handleGetActivityRequest(req, res) {
         }
         return res.status(200).send({ message: 'Activity retrieved successfully', timeLogs });
     } catch (error) {
+        if (error instanceof TimeLogNotFoundError) {
+            return res.status(404).send({ error: "Activity not found"});
+        }
         console.error('Error retrieving activity:', error);
         return res.status(500).send({ error: 'Internal server error' });
     }
 }
 
-// Helper functions
 function getCurrentDateTime() {
     const now = new Date();
+    
+    // Get local date and time
+    const localDate = now.toLocaleDateString('en-CA',{timeZone: 'Asia/Manila'}); // Returns YYYY-MM-DD format
+    const localTime = now.toLocaleTimeString('en-GB', { 
+        timeZone: 'Asia/Manila',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    }); // Returns HH:MM:SS format
+    
     return {
-        date: now.toISOString().split('T')[0],
-        time: now.toISOString().split('T')[1].split('.')[0]
+        date: localDate,
+        time: localTime
     };
 }
 
