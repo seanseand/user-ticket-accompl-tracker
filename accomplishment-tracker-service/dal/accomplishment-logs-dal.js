@@ -28,6 +28,7 @@ async function saveAccomplishment(userId, date, accomplishmentData) {
     }
 }
 
+// This is not ideal but for now it will do
 async function updateAccomplishment(userId, date, updatedData) {
     const db = getDB();
     const collection = db.collection('accomplishmentTracker');
