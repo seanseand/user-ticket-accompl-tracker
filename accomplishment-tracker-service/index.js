@@ -7,7 +7,8 @@ dotenv.config({ path: "./.env" });
 import { ifValidToken } from './middleware/jwt-middleware.js';
 
 // route imports
-import { timeInOutRouter } from './routes/time-in-out-route.js';
+import { timeInOutRouter } from './routes/time-log-route.js';
+import { accomplishmentFormRouter } from './routes/accomplishment-logs-route.js';
 
 // util imports
 import redisClient, { connectRedis }  from './util/redis-util.js';

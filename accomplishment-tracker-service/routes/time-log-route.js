@@ -16,11 +16,17 @@ timeInOutRouter.get('/health', (req, res) => {
     res.status(200).send({status: 'UP'});
 });
 
+//time-in-out routes
 timeInOutRouter.post('/time-in', handleTimeInRequest);
 timeInOutRouter.post('/time-out', handleTimeOutRequest);
 timeInOutRouter.post('/lunch-break', handleLunchBreakRequest);
 timeInOutRouter.post('/end-lunch-break', handleEndLunchBreakRequest);
 timeInOutRouter.get('/activity', handleGetActivityRequest);
+
+// Time Log Routes
+timeInOutRouter.get('/timelogs')
+timeInOutRouter.get('/timelogs/:userId')
+
 
 export { 
     timeInOutRouter
