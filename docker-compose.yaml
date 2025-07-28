@@ -1,0 +1,86 @@
+services:
+  accomplishment-tracker-api:
+    build:
+      context: ./accomplishment-tracker-service
+      dockerfile: Dockerfile
+    ports:
+      - 2010:2010
+    env_file:
+      - ./accomplishment-tracker-service/.env
+    volumes:
+      - ./accomplishment-tracker-service:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - accomplishment-tracker-network
+    depends_on:
+      - redis
+      - mongodb-arkline
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - accomplishment-tracker-network
+    volumes:
+      - redis-data:/data
+    command: redis-server --requirepass ${REDIS_PASSWORD:-password}
+  
+  redis-insight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - "5540:5540"
+    networks:
+      - accomplishment-tracker-network
+    depends_on:
+      - redis
+    volumes:
+      - redis-insight-data:/data
+
+  mongodb-arkline:
+    image: mongo:7
+    container_name: mongodb-arkline
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-accomplishment_tracker}
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+    networks:
+      - accomplishment-tracker-network
+
+  mongo-express-arkline:
+    image: mongo-express:latest
+    container_name: mongo-express-arkline
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME:-admin}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD:-password}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME:-admin}:${MONGO_PASSWORD:-password}@mongodb-arkline:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongodb-arkline
+    networks:
+      - accomplishment-tracker-network
+
+volumes:
+  accomplishment-tracker-data:
+    driver: local
+  redis-data:
+    driver: local
+  redis-insight-data:
+    driver: local
+  mongodb-data:
+    driver: local
+  mongodb-config:
+    driver: local
+
+networks:
+  accomplishment-tracker-network:
+    driver: bridge
