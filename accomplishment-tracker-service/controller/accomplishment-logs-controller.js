@@ -1,11 +1,11 @@
 import redisClient from "../util/redis-util.js";
-import { getCurrentDateTime } from "./time-in-out-controller.js";
+import { getCurrentDateTime } from "./time-log-controller.js";
 import { getCurrentActivity } from "../util/time-log-cache-utility.js";
 import { TimeLogNotFoundError } from "../error/time-log-cache-error.js";
 
 //DAL Imports 
 import { saveTimeLog } from "../dal/time-logs-dal.js";
-import { saveAccomplishmentForm, getAccomplishment, updateAccomplishment } from "../dal/accomplishment-form-dal.js";
+import { saveAccomplishment, getAccomplishment, updateAccomplishment } from "../dal/accomplishment-logs-dal.js";
 async function handleFormSubmission(req, res) {
     const formData = req.body;
     
@@ -25,7 +25,7 @@ async function handleFormSubmission(req, res) {
         }
 
         await saveTimeLog(userId, currentDateTime.date, timeLogs); // Save time log to the database
-        await saveAccomplishmentForm(userId, currentDateTime.date, formData); // Save form data to the database
+        await saveAccomplishment(userId, currentDateTime.date, formData); // Save form data to the database
 
         return res.status(200).send({ message: 'Form submitted successfully', formData, timeLogs });
     }catch(error) {
