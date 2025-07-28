@@ -5,7 +5,7 @@ import { TimeLogNotFoundError } from "../error/time-log-cache-error.js";
 
 //DAL Imports 
 import { saveTimeLog } from "../dal/time-logs-dal.js";
-import { saveAccomplishmentForm } from "../dal/accomplishment-form-dal.js";
+import { saveAccomplishmentForm, getAccomplishment, updateAccomplishment } from "../dal/accomplishment-form-dal.js";
 async function handleFormSubmission(req, res) {
     const formData = req.body;
     
@@ -36,6 +36,28 @@ async function handleFormSubmission(req, res) {
     }
 }
 
+async function handleGetAccomplishments(req,res) {
+    const currentUserId = req.user.userId;
+    const { userId, date } = req.query;
+
+    const accomplishment = getAccomplishment(userId, date)
+    return res.status(200).send({accomplishmentLogs: accomplishment})
+}
+
+async function handleUpdateAccomplishment(req, res){
+    const currentUserId = req.user.userId
+    const { userId, date } = req.query
+    const { updatedData } = req.body
+
+    try{
+        await updateAccomplishment(userId, date, updatedData)
+    }catch(error) {
+        console.log(error)
+        res.status(500).send({message:"Error saving updates, please try again"})
+    }
+
+    res.status(200).send({message:"saved successfully"})
+}
 
 
 //TODO: Rework this later to use a more robust validation library, and use custom error classes for better error handling
@@ -72,4 +94,4 @@ const sampleFormData = {
     "projectHeads": ["John Doe", "Jane Smith"],
 }
 
-export { handleFormSubmission };
+export { handleFormSubmission, handleGetAccomplishments, handleUpdateAccomplishment };
