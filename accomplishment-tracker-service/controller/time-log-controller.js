@@ -1,5 +1,6 @@
 import redisClient from "../util/redis-util.js"
 import { getCurrentActivity, setCurrentActivity} from "../util/time-log-cache-utility.js";
+import { getAllTimeLogs, getTimeLogsByUserId } from "../dal/time-logs-dal.js";
 
 async function handleTimeInRequest(req, res) {
     const userId = req.user.userId;
@@ -101,6 +102,32 @@ function getCurrentDateTime() {
     };
 }
 
+async function handleGetTimeLogsByUserId(req, res) {
+    const userId = req.params.userId;
+    const date = req.query.date || getCurrentDateTime().date;
+
+    try {
+        const timeLogs = await getTimeLogsByUserId(userId, date);
+        if (!timeLogs) {
+            return res.status(404).send({ error: 'No time logs found for the specified user and date' });
+        }
+        return res.status(200).send({ message: 'Time logs retrieved successfully', timeLogs });
+    } catch (error) {
+        console.error('Error retrieving time logs:', error);
+        return res.status(500).send({ error: 'Internal server error' });
+    }
+}
+
+async function handleGetAllTimeLogs(req, res) {
+    try {
+        const allTimeLogs = await getAllTimeLogs();
+        return res.status(200).send({ message: 'All time logs retrieved successfully', allTimeLogs });
+    } catch (error) {
+        console.error('Error retrieving all time logs:', error);
+        return res.status(500).send({ error: 'Internal server error' });
+    }
+}
+
 
 export {
     handleTimeInRequest,
@@ -108,5 +135,7 @@ export {
     handleLunchBreakRequest,
     handleEndLunchBreakRequest,
     handleGetActivityRequest,
-    getCurrentDateTime
+    getCurrentDateTime,
+    handleGetAllTimeLogs,
+    handleGetTimeLogsByUserId
 }
