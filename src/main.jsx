@@ -10,6 +10,7 @@ import Admin from "./components/page/Admin.jsx";
 import AccomplishmentLog from "./components/page/AccomplishmentLog/AccomplishmentLogLayout.jsx";
 import LogTime from "./components/page/AccomplishmentLog/LogTime.jsx";
 import AccomplishmentLogPage from "./components/page/AccomplishmentLog/AccomplishmentLogPage.jsx";
+import AccomplishmentLogPageAdmin from "./components/page/Admin/AccomplishmentLogPageAdmin.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Login /> },
@@ -24,7 +25,18 @@ const router = createBrowserRouter([
       { path: "accomplishment-logs", element: <AccomplishmentLogPage /> },
     ],
   },
+    {
+    path: "/Admin/AccomplishmentLog",
+    element: <AccomplishmentLog />,
+    children: [
+      {path: "log-time", element: <LogTime /> },
+      {path: "accomplishment-logs", element: <AccomplishmentLogPageAdmin /> },
+    ]
+  }
+
 ]);
+
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
