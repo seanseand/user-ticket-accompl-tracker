@@ -69,13 +69,13 @@ async function getAccomplishment(userId, date) {
 
     try {
         const userDoc = await collection.findOne({ userId: userId }, { projection: { _id: 0 } });
-        
+        console.log(userDoc)
         if (!userDoc) {
             throw new Error(`No accomplishments found for user ${userId}`);
         }
 
         const accomplishment = userDoc.dates?.[date]?.accomplishmentLog;
-        
+        console.log(accomplishment)
         if (!accomplishment) {
             throw new Error(`No accomplishment found for user ${userId} on date ${date}`);
         }
