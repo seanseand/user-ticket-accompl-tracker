@@ -24,6 +24,7 @@ async function handleFormSubmission(req, res) {
             return res.status(404).send({ error: 'No time in record found for today' });
         }
 
+        console.log("Time logs retrieved from cache:", timeLogs);
         await saveTimeLog(userId, currentDateTime.date, timeLogs); // Save time log to the database
         await saveAccomplishment(userId, currentDateTime.date, formData); // Save form data to the database
 
@@ -32,6 +33,7 @@ async function handleFormSubmission(req, res) {
         if(error instanceof TimeLogNotFoundError){
             return res.status(404).send({ error: error.message });
         }
+        console.log(error)
         return res.status(500).send({ error: 'Internal server error' });
     }
 }
@@ -40,7 +42,8 @@ async function handleGetAccomplishments(req,res) {
     const currentUserId = req.user.userId;
     const { userId, date } = req.query;
 
-    const accomplishment = getAccomplishment(userId, date)
+    const accomplishment = await getAccomplishment(userId, date)
+    console.log(accomplishment)
     return res.status(200).send({accomplishmentLogs: accomplishment})
 }
 
@@ -76,6 +79,8 @@ function validateFormData(formData) {
     }
 
     if (formData.status !== 'Done' && !formData.percentageOfActivity) {
+        console.log(formData.status)
+        console.log(formData.percentageOfActivity)
         throw new Error('Percentage of activity is required for non-done status');
     }
 }
