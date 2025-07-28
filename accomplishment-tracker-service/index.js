@@ -12,6 +12,7 @@ import { accomplishmentFormRouter } from './routes/accomplishment-logs-route.js'
 
 // util imports
 import redisClient, { connectRedis }  from './util/redis-util.js';
+import { connectMongoDB, disconnectMongoDB } from './util/mongo-util.js';
 
 
 const app = express();
@@ -28,10 +29,13 @@ app.use('/accomplishment-tracker/accomplishment-service/', ifValidToken(), accom
 
 try{
     await connectRedis();
+    await connectMongoDB();
     app.listen(PORT, () => {
         console.log(`accomplishment-tracker-service is running on port ${PORT}`);
     });
 } catch (error) {
     console.log('Error starting the server:', error);
+    disconnectMongoDB();
+    redisClient.quit();
     process.exit(1);
 }
