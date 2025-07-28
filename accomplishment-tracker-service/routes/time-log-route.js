@@ -27,8 +27,8 @@ timeInOutRouter.post('/end-lunch-break', handleEndLunchBreakRequest);
 timeInOutRouter.get('/activity', handleGetActivityRequest);
 
 // Time Log Routes
-timeInOutRouter.get('/timelogs', allowedRoles(['admin']), handleGetAllTimeLogs);
-timeInOutRouter.get('/timelogs/:userId', allowedRoles(['admin']), handleGetTimeLogsByUserId);
+timeInOutRouter.get('/timelogs', allowedRoles('admin'), handleGetAllTimeLogs);
+timeInOutRouter.get('/timelogs/:userId', requireRoleOrOwnership('admin'), handleGetTimeLogsByUserId);
 
 
 export { 
