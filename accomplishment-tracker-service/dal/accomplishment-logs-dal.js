@@ -1,4 +1,4 @@
-import { getDB } from "../util/db-connection.js";
+import { getDB } from "../util/mongo-util.js";
 
 //FIXME: This isn't ideal, using mongoose would be better than these raw queries, this current approach doesn't guarantee data integrity
 // but for now, this is a quick fix to get the service running
