@@ -48,5 +48,6 @@ function requireRoleOrOwnership(...roles){
 
 export {
     ifValidToken,
-    allowedRoles
+    allowedRoles,
+    requireRoleOrOwnership
 }
