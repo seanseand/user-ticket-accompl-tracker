@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "../../layout/Sidebar";
+import Sidebar from "../../layout/Sidebar/Sidebar";
 import { Outlet } from "react-router";
 
 const AccomplishmentLog = () => {
