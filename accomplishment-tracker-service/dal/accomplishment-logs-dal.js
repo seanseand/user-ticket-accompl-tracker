@@ -1,4 +1,4 @@
-import { getDB } from "../util/db-connection.js";
+import { getDB } from "../util/mongo-util.js";
 
 //FIXME: This isn't ideal, using mongoose would be better than these raw queries, this current approach doesn't guarantee data integrity
 // but for now, this is a quick fix to get the service running
@@ -28,6 +28,7 @@ async function saveAccomplishment(userId, date, accomplishmentData) {
     }
 }
 
+// This is not ideal but for now it will do
 async function updateAccomplishment(userId, date, updatedData) {
     const db = getDB();
     const collection = db.collection('accomplishmentTracker');
@@ -57,4 +58,33 @@ async function updateAccomplishment(userId, date, updatedData) {
     }
 }
 
-export { saveAccomplishment, updateAccomplishment};
+
+async function getAccomplishment(userId, date) {
+    const db = getDB();
+    const collection = db.collection('accomplishmentTracker');
+
+    if (!userId || !date) {
+        throw new Error('User ID and date are required');
+    }
+
+    try {
+        const userDoc = await collection.findOne({ userId: userId }, { projection: { _id: 0 } });
+        console.log(userDoc)
+        if (!userDoc) {
+            throw new Error(`No accomplishments found for user ${userId}`);
+        }
+
+        const accomplishment = userDoc.dates?.[date]?.accomplishmentLog;
+        console.log(accomplishment)
+        if (!accomplishment) {
+            throw new Error(`No accomplishment found for user ${userId} on date ${date}`);
+        }
+
+        return accomplishment;
+    } catch (error) {
+        console.error('Error retrieving accomplishment:', error);
+        throw error;
+    }
+}
+
+export { saveAccomplishment, updateAccomplishment, getAccomplishment };

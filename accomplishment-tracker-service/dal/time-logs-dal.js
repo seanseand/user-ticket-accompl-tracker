@@ -79,6 +79,7 @@ async function saveTimeLog(userId, date, timeLog) {
     const collection = db.collection('accomplishmentTracker');
 
     try {
+        console.log("Saving...")
         const result = await collection.updateOne(
             { userId: userId }, // Find by userId only
             { 

@@ -32,7 +32,22 @@ function allowedRoles(...roles){
     }
 }
 
+function requireRoleOrOwnership(...roles){
+    return (req, res, next) => {
+        const currentUserId = req.user.userId;
+        const role = req.user.role;
+        const { userId } = req.query;
+
+        if(currentUserId !== userId || !roles.includes(role) ){
+            return res.status(403).send({message:'Forbidden'});
+        }
+
+        next();
+    }
+}
+
 export {
     ifValidToken,
-    allowedRoles
+    allowedRoles,
+    requireRoleOrOwnership
 }

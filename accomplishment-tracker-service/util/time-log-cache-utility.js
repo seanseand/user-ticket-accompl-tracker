@@ -3,7 +3,7 @@ import { TimeLogCacheError, TimeLogSaveError, TimeLogNotFoundError } from '../er
 
 async function getCurrentActivity(userId, date) {
   try {
-    const activity = await redisClient.hGet(`time-log:${userId}:${date}`);
+    const activity = await redisClient.get(`time-log:${userId}:${date}`);
     if (!activity) {
         throw new TimeLogNotFoundError(userId, date);
     }
@@ -19,7 +19,7 @@ async function getCurrentActivity(userId, date) {
 
 async function setCurrentActivity(userId, date, activity) {
     try {
-        await redisClient.hSet(`time-log:${userId}:${date}`, JSON.stringify(activity));
+        await redisClient.set(`time-log:${userId}:${date}`, JSON.stringify(activity));
         await redisClient.expire(`time-log:${userId}:${date}`, 60 * 60 * 24 * 2); // 2 days expiration
     } catch (error) {
         console.error("Error saving current activity:", error);

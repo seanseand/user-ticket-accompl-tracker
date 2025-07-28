@@ -5,8 +5,11 @@ import {
     handleTimeOutRequest, 
     handleLunchBreakRequest, 
     handleEndLunchBreakRequest, 
-    handleGetActivityRequest 
-} from '../controller/time-in-out-controller.js';
+    handleGetActivityRequest ,
+    handleGetTimeLogsByUserId,
+    handleGetAllTimeLogs
+} from '../controller/time-log-controller.js';
+import { allowedRoles, requireRoleOrOwnership } from '../middleware/jwt-middleware.js';
 
 
 const timeInOutRouter = Router();
@@ -24,8 +27,8 @@ timeInOutRouter.post('/end-lunch-break', handleEndLunchBreakRequest);
 timeInOutRouter.get('/activity', handleGetActivityRequest);
 
 // Time Log Routes
-timeInOutRouter.get('/timelogs')
-timeInOutRouter.get('/timelogs/:userId')
+timeInOutRouter.get('/timelogs', allowedRoles('admin'), handleGetAllTimeLogs);
+timeInOutRouter.get('/timelogs/:userId', requireRoleOrOwnership('admin'), handleGetTimeLogsByUserId);
 
 
 export { 
