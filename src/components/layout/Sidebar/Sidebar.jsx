@@ -23,14 +23,14 @@ const Sidebar = () => {
   };
 
   return (
-    <div>
+    <div className="h-full fixed top-[48px] bottom-0">
       <aside
         id="default-sidebar"
-        className="w-64 h-full flex flex-col justify-between transition-transform -translate-x-full sm:translate-x-0 shadow-xl"
+        className="w-64 h-full bg-gray-50 flex flex-col transition-transform -translate-x-full sm:translate-x-0 shadow-xl"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 flex flex-col">
-          <ul className="space-y-4 font-bold flex-1 font-medium">
+        <div className="flex-1 px-3 py-4">
+          <ul className="space-y-4 font-bold font-medium">
             {menuItems.map((item) => {
               const Icon = getIcon(item.key);
               return (
@@ -64,7 +64,7 @@ const Sidebar = () => {
             })}
           </ul>
         </div>
-        <div className="px-3 py-4 bg-gray-50">
+        <div className="mt-auto px-3 py-4 border-t">
           <a href="#" className={baseClass + " hover:bg-[#3C5985]"}>
             <LogOut className={iconBase} size={22} />
             <span className="ms-3 group-hover:text-white">Log out</span>
